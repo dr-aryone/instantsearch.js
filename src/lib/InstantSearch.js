@@ -99,6 +99,9 @@ See: https://www.algolia.com/doc/guides/building-search-ui/going-further/backend
     };
 
     this._stalledSearchDelay = stalledSearchDelay;
+    this._searchStalledTimer = null;
+    this._isSearchStalled = true;
+
     this._staticSearchParameters = {
       ...searchParameters,
       index: indexName,
@@ -355,9 +358,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
         error,
       });
     });
-
-    this._searchStalledTimer = null;
-    this._isSearchStalled = true;
 
     this.helper.search();
 
