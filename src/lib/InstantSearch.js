@@ -347,6 +347,19 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
 
     this._init(this.helper, this.helper.state);
 
+    this.derivedHelper.on('search', () => {
+      if (!this._isSearchStalled && !this._searchStalledTimer) {
+        this._searchStalledTimer = setTimeout(() => {
+          this._isSearchStalled = true;
+          this._render(
+            this.helper,
+            this.derivedHelper.lastResults,
+            this.derivedHelper.lastResults._state
+          );
+        }, this._stalledSearchDelay);
+      }
+    });
+
     this.derivedHelper.on('result', ({ results, state }) => {
       this._render(this.helper, results, state);
     });
@@ -360,19 +373,6 @@ See: https://www.algolia.com/doc/guides/building-search-ui/widgets/create-your-o
     });
 
     this.helper.search();
-
-    this.derivedHelper.on('search', () => {
-      if (!this._isSearchStalled && !this._searchStalledTimer) {
-        this._searchStalledTimer = setTimeout(() => {
-          this._isSearchStalled = true;
-          this._render(
-            this.helper,
-            this.derivedHelper.lastResults,
-            this.derivedHelper.lastResults._state
-          );
-        }, this._stalledSearchDelay);
-      }
-    });
 
     // track we started the search if we add more widgets,
     // to init them directly after add
